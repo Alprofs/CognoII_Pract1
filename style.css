@@ -1,0 +1,538 @@
+/* ==========================================================================
+   1. Root Variables & Reset
+   ========================================================================== */
+:root {
+    --bg-color: #F4F7FB;
+    --card-bg: #FFFFFF;
+    --text-primary: #1A202C;
+    --text-secondary: #5A6A80;
+    --grey-border: #D8E0EA;
+
+    --primary-blue: #1E88E5;
+    --primary-blue-dark: #1565C0;
+    --primary-green: #10B981;
+    --primary-green-dark: #059669;
+    --progress-yellow: #F59E0B;
+
+    --correct-bg: #ECFDF5;
+    --correct-border: #10B981;
+    --wrong-bg: #FEF2F2;
+    --wrong-border: #EF4444;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Almarai', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-color);
+    overflow: hidden;
+}
+
+#app-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* ==========================================================================
+   2. Screen Management (Prevents Freezing/Sticking)
+   ========================================================================== */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* ==========================================================================
+   3. Home Screen
+   ========================================================================== */
+#home-screen {
+    padding: 30px 20px 100px 20px;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.hero-section {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background-color: #E0E7FF;
+    color: #4338CA;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.main-title {
+    color: #0F172A;
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.modes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    max-width: 550px;
+}
+
+.mode-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 20px;
+    background: var(--card-bg);
+    border: 3px solid var(--grey-border);
+    border-radius: 22px;
+    box-shadow: 0 6px 0 var(--grey-border);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mode-card:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 var(--grey-border);
+}
+
+.mode-icon {
+    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    flex-shrink: 0;
+}
+
+.mode-elements .mode-icon {
+    background: #EFF6FF;
+}
+
+.mode-ts .mode-icon {
+    background: #F5F3FF;
+}
+
+.mode-info {
+    flex-grow: 1;
+}
+
+.mode-info h2 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 4px;
+}
+
+.mode-info p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.mode-arrow {
+    font-size: 20px;
+    color: #94A3B8;
+    font-weight: 900;
+}
+
+/* ==========================================================================
+   4. Author Name with Stealth / Camouflage Effect (نظرة ثاقبة)
+   ========================================================================== */
+#home-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 12px 0 16px 0;
+    background-color: var(--bg-color);
+    border-top: 1px solid var(--grey-border);
+    text-align: center;
+    z-index: 50;
+}
+
+#home-footer .created-by {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   تعديل حركة تمويه الاسم (بدون اللون الأسود)
+   ========================================================================== */
+#home-footer .author-name {
+    margin-top: 2px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #EDF1F7; /* أزرق التطبيق الأنيق بدلاً من الأسود */
+    display: inline-block;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: color 0.4s ease, transform 0.4s ease;
+    animation: stealthCamouflage 4.5s infinite ease-in-out;
+}
+
+/* التبديل: يكون بلون التطبيق الأساسي، ثم يتحول لثانية واحدة للون المموه */
+@keyframes stealthCamouflage {
+    0%, 70%, 100% {
+        color: #EDF1F7; /* يعود للأزرق الأنيق */
+        text-shadow: none;
+        transform: scale(1);
+    }
+    82% {
+        color: #EDF1F7; /* لون مقارب جداً جداً للخلفية */
+        text-shadow: 0 0 1px rgba(216, 224, 234, 0.5);
+        transform: scale(1.02);
+    }
+}
+
+/* وميض النقر اليدوي */
+.stealth-clicked {
+    animation: flashCamouflage 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+@keyframes flashCamouflage {
+    0% { color: #EDF1F7; }
+    50% { color: #EDF1F7; text-shadow: 0 0 1px rgba(216, 224, 234, 0.5); }
+    100% { color: #EDF1F7; }
+}
+
+/* ==========================================================================
+   5. Quiz Screen & Safe Scroll Container
+   ========================================================================== */
+#quiz-screen {
+    position: relative;
+    padding: 0;
+}
+
+.quiz-header {
+    width: 100%;
+    max-width: 800px;
+    padding: 16px 20px 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+    z-index: 20;
+    background: var(--bg-color);
+}
+
+.progress-bar-bg {
+    flex-grow: 1;
+    height: 14px;
+    background: #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--progress-yellow);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quiz-counter {
+    font-weight: 800;
+    min-width: 60px;
+    font-size: 15px;
+    color: #334155;
+    text-align: center;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #64748B;
+    font-size: 24px;
+    font-weight: 900;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 50%;
+    transition: background 0.15s;
+}
+
+.close-btn:hover {
+    background: #E2E8F0;
+}
+
+/* جسم التمرير الداخلي لمنع تجمّد الشاشة أو ضياع الخيارات بالأسفل */
+.quiz-scroll-container {
+    width: 100%;
+    max-width: 800px;
+    flex-grow: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 20px 140px 20px; /* مساحة أمان مريحة جداً أعلى الفوتر */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#round-info {
+    width: 100%;
+    margin-bottom: 12px;
+    color: var(--primary-blue-dark);
+    font-size: 15px;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.question-box {
+    width: 100%;
+    margin-bottom: 18px;
+    padding: 18px 20px;
+    background: var(--card-bg);
+    border: 3px solid var(--grey-border);
+    border-radius: 20px;
+    box-shadow: 0 5px 0 var(--grey-border);
+    color: var(--text-primary);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.quiz-question-img {
+    max-width: 100%;
+    max-height: 250px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 15px auto;
+    border-radius: 12px;
+    border: 2px solid #E2E8F0;
+    background-color: #FFFFFF;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.options-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    width: 100%;
+}
+
+@media (min-width: 640px) {
+    .options-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.option-btn {
+    display: flex;
+    align-items: center;
+    padding: 15px 18px;
+    background: var(--card-bg);
+    border: 3px solid var(--grey-border);
+    border-radius: 16px;
+    color: #1E293B;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: left;
+    box-shadow: 0 4px 0 var(--grey-border);
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    line-height: 1.4;
+}
+
+.option-btn:hover:not(:disabled) {
+    background: #F8FAFC;
+}
+
+.option-btn:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--grey-border);
+}
+
+.option-btn.correct {
+    background: var(--correct-bg) !important;
+    border-color: var(--correct-border) !important;
+    color: var(--correct-border) !important;
+    box-shadow: 0 4px 0 var(--correct-border) !important;
+}
+
+.option-btn.wrong {
+    background: var(--wrong-bg) !important;
+    border-color: var(--wrong-border) !important;
+    color: var(--wrong-border) !important;
+    box-shadow: 0 4px 0 var(--wrong-border) !important;
+}
+
+.quiz-hint-box {
+    display: none;
+    width: 100%;
+    margin-top: 18px;
+    padding: 16px 18px;
+    background-color: #FEF3C7;
+    border: 3px solid #F59E0B;
+    border-radius: 18px;
+    box-shadow: 0 5px 0 #D97706;
+    text-align: left;
+}
+
+.quiz-hint-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 800;
+    color: #B45309;
+    margin-bottom: 6px;
+}
+
+.quiz-hint-content {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #451A03;
+}
+
+/* ==========================================================================
+   6. Navigation Footer Controls
+   ========================================================================== */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    padding: 14px 20px;
+    background: #FFFFFF;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
+    z-index: 100;
+    justify-content: center;
+}
+
+.footer .nav-btn {
+    flex: 1;
+    max-width: 380px;
+    padding: 14px;
+    border: none;
+    border-radius: 16px;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.nav-btn.prev {
+    background: var(--primary-blue);
+    box-shadow: 0 4px 0 var(--primary-blue-dark);
+}
+
+.nav-btn.next {
+    background: var(--primary-green);
+    box-shadow: 0 4px 0 var(--primary-green-dark);
+}
+
+.nav-btn:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 transparent;
+}
+
+.nav-btn:disabled {
+    background: #CBD5E1;
+    box-shadow: 0 4px 0 #94A3B8;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* ==========================================================================
+   7. Overlay Win Dialog
+   ========================================================================== */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+.dialog {
+    width: 90%;
+    max-width: 400px;
+    padding: 32px 24px;
+    background: #FFFFFF;
+    border-radius: 26px;
+    text-align: center;
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.25);
+}
+
+.win-title {
+    font-size: 48px;
+    margin-bottom: 6px;
+}
+
+#win-status {
+    color: #0F172A;
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+
+.win-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.btn-main {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-green);
+    border: none;
+    border-radius: 16px;
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 800;
+    box-shadow: 0 5px 0 var(--primary-green-dark);
+    cursor: pointer;
+}
+
+.btn-main:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 transparent;
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="html-root">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pharmacognosy II - Sheet 1 Practical</title>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800;900&family=Poppins:wght@500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app-container">
+        <!-- Home Screen -->
+        <div id="home-screen" class="screen active">
+            <div class="hero-section">
+                <span class="badge">Sheet 1 Practice</span>
+                <h1 class="main-title">Pharmacognosy II</h1>
+                <p class="subtitle">Practical Revision & Powder Identification</p>
+            </div>
+
+            <!-- Two Main Navigation Buttons -->
+            <div class="modes-container">
+                <button type="button" class="mode-card mode-elements" onclick="startQuizMode('elements')">
+                    <div class="mode-icon">🔬</div>
+                    <div class="mode-info">
+                        <h2>Key Elements & Powder</h2>
+                        <p>Identification, Crystals, Fibers, Negatives, Chemical Tests & Physicals</p>
+                    </div>
+                    <span class="mode-arrow">➜</span>
+                </button>
+
+                <button type="button" class="mode-card mode-ts" onclick="startQuizMode('ts')">
+                    <div class="mode-icon">📐</div>
+                    <div class="mode-info">
+                        <h2>Transverse Sections (T.S.)</h2>
+                        <p>Diagrams, Numerical Labeling (1, 2, 3...) & Stem/Bark Anatomy</p>
+                    </div>
+                    <span class="mode-arrow">➜</span>
+                </button>
+            </div>
+
+            <div id="home-footer">
+                <p class="created-by">Designed & Developed by</p>
+                <!-- اسمك بتأثير التمويه الذي لا يلاحظه إلا صاحب نظرة ثاقبة -->
+                <p class="author-name" onclick="triggerCamouflageFlash()" title="Sharp Eyes Only">𝓐𝓱𝓶𝓮𝓭 𝓜𝓸𝓼𝓽𝓪𝓯𝓪</p>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen">
+            <div class="quiz-header">
+                <div class="progress-bar-bg">
+                    <div id="bar" class="progress-bar-fill"></div>
+                </div>
+                <div id="counter" class="quiz-counter">0 / 0</div>
+                <button type="button" class="close-btn" onclick="goHome()" aria-label="Exit Quiz">✕</button>
+            </div>
+
+            <!-- Dedicated internal scroll body (Never freezes or hides bottom options) -->
+            <div class="quiz-scroll-container">
+                <div id="round-info">Round (1)</div>
+                
+                <div class="question-box">
+                    <img id="q-img" class="quiz-question-img" src="" alt="Question Image" style="display: none;">
+                    <div id="q-txt">...</div>
+                </div>
+
+                <div class="options-container" id="opt-box"></div>
+                
+                <div id="hint-box" class="quiz-hint-box"></div>
+            </div>
+
+            <div class="footer">
+                <button type="button" id="prev-btn" class="nav-btn prev" onclick="goPrev()">Prev</button>
+                <button type="button" id="next-btn" class="nav-btn next" onclick="goNext()">Next</button>
+            </div>
+        </div>
+
+        <!-- Win Dialog Overlay -->
+        <div id="win-overlay" class="overlay">
+            <div class="dialog">
+                <h1 class="win-title">🎉</h1>
+                <h2 id="win-status">Outstanding!</h2>
+                <p id="win-msg" class="win-text">All questions completed successfully!</p>
+                <button type="button" id="home-btn" class="btn-main" onclick="closeWinOverlay()">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. تحميل ملف الأسئلة المستقل -->
+    <script src="questions.js"></script>
+
+    <!-- 2. تحميل كود المنطق البرمجي -->
+    <script src="main.js"></script>
+</body>
+
+</html>
