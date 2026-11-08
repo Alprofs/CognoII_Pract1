@@ -446,18 +446,7 @@ body {
 /* ==========================================================================
    Options Grid (Duolingo 3D Button Style)
    ========================================================================== */
-.options-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    width: 100%;
-}
 
-@media (min-width: 600px) {
-    .options-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
 
 .option-btn {
     display: flex;
@@ -622,20 +611,6 @@ body {
 /* ==========================================================================
    Bottom Navigation: Prev LEFT, Next RIGHT
    ========================================================================== */
-.quiz-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 16px 20px;
-    background: var(--card-surface);
-    border-top: 3px solid var(--border-color);
-    display: flex;
-    flex-direction: row; /* LTR: Prev on LEFT, Next on RIGHT */
-    justify-content: space-between;
-    gap: 16px;
-    z-index: 100;
-}
 
 .duo-btn {
     flex: 1;
@@ -749,4 +724,64 @@ body {
 @keyframes fadeInDown {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ==========================================================================
+   FIX: منع تغطية الفوتر للخيارات السفلية وضمان التمرير الكامل
+   ========================================================================== */
+#quiz-screen {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+}
+
+#quiz-screen.active {
+    display: flex;
+}
+
+.quiz-scroll-body {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* مساحة أمان سفلية كافية تضمن ظهور آخر اختيار وصندوق التوضيح فوق الفوتر */
+    padding: 10px 20px 180px 20px !important;
+    display: flex;
+    flex-direction: column;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 25px; /* مسافة أمان إضافية أسفل الخيارات */
+}
+
+@media (min-width: 600px) {
+    .options-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.quiz-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    padding: 14px 20px;
+    background: var(--card-surface);
+    border-top: 3px solid var(--border-color);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    z-index: 1000;
 }
