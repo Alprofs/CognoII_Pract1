@@ -1,12 +1,9 @@
-/* ==========================================================================
-   Pharmacognosy II - Sheet 1 Practical Exam Logic
-   Clean Engine - Questions are referenced from questions.js
-   ========================================================================== */
-
 let activeQuestionSet = [];
 let currentRoundQuestions = [];
 let currentIndex = 0;
 let currentRound = 1;
+let isEssayMode = false;
+let isCurtainRevealed = false;
 
 function shuffleArray(array) {
     const arr = [...array];
@@ -73,81 +70,138 @@ function prepareRound(questionsArray) {
     currentIndex = 0;
 }
 
+function toggleStudyMode() {
+    isEssayMode = !isEssayMode;
+    const modeBadge = document.getElementById('mode-badge');
+    const modeBtn = document.getElementById('study-mode-toggle');
+
+    if (isEssayMode) {
+        modeBadge.innerText = "Curtain / Essay Mode";
+        modeBadge.style.background = "#E6F9D5";
+        modeBadge.style.color = "#46A302";
+        modeBtn.style.color = "#58CC02";
+        modeBtn.style.borderColor = "#58CC02";
+    } else {
+        modeBadge.innerText = "MCQ Mode";
+        modeBadge.style.background = "#F0F0F0";
+        modeBadge.style.color = "#666";
+        modeBtn.style.color = "#777";
+        modeBtn.style.borderColor = "var(--border-color)";
+    }
+    loadQuestion();
+}
+
 function updateQuizUI() {
-    document.getElementById('round-info').innerText = `Round (${currentRound})`;
-    document.getElementById('prev-btn').innerText = "Prev";
+    document.getElementById('round-info').innerText = `Round ${currentRound}`;
 }
 
 function loadQuestion() {
     const qData = currentRoundQuestions[currentIndex];
     const total = currentRoundQuestions.length;
 
-    // Counter & Smooth Progress
     document.getElementById('counter').innerText = `${currentIndex + 1} / ${total}`;
     setTimeout(() => {
         document.getElementById('bar').style.width = `${((currentIndex + 1) / total) * 100}%`;
     }, 40);
 
-    // Question Text
     document.getElementById('q-txt').innerHTML = qData.q;
 
-    // Image Element
+    // --- Image Handling with Skeleton Loader ---
+    const imgWrapper = document.getElementById('q-img-wrapper');
     const imgEl = document.getElementById('q-img');
+    const loaderEl = document.getElementById('img-loader');
+
     if (qData.image) {
-        imgEl.src = qData.image;
-        imgEl.style.display = 'block';
-    } else {
-        imgEl.src = '';
+        imgWrapper.style.display = 'flex';
+        imgEl.classList.remove('loaded');
         imgEl.style.display = 'none';
-    }
+        loaderEl.style.display = 'flex';
 
-    // Render Options
-    const box = document.getElementById('opt-box');
-    box.innerHTML = '';
-
-    qData.shuffledIndices.forEach(originalIdx => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'option-btn';
-        btn.innerHTML = qData.opts[originalIdx];
-
-        if (qData.userAnswerIndex === null) {
-            btn.onclick = () => selectOption(btn, originalIdx, qData);
-        } else {
-            btn.disabled = true;
-            if (originalIdx === qData.correct) {
-                btn.classList.add('correct');
-            } else if (originalIdx === qData.userAnswerIndex) {
-                btn.classList.add('wrong');
-            }
-        }
-        box.appendChild(btn);
-    });
-
-    // Hint / Explanation Display
-    const hintBox = document.getElementById('hint-box');
-    if (qData.userAnswerIndex !== null && qData.hint) {
-        hintBox.innerHTML = `
-            <div class="quiz-hint-header">
-                <span>💡</span>
-                <span>Explanation</span>
-            </div>
-            <div class="quiz-hint-content">${qData.hint}</div>
-        `;
-        hintBox.style.display = 'block';
+        // Preload new image to eliminate slow-network freezing or old-image ghosting
+        const preloader = new Image();
+        preloader.src = qData.image;
+        preloader.onload = () => {
+            imgEl.src = qData.image;
+            imgEl.style.display = 'block';
+            loaderEl.style.display = 'none';
+            setTimeout(() => imgEl.classList.add('loaded'), 20);
+        };
+        preloader.onerror = () => {
+            loaderEl.innerHTML = "<span>Image unavailable</span>";
+        };
     } else {
-        hintBox.style.display = 'none';
-        hintBox.innerHTML = '';
+        imgWrapper.style.display = 'none';
+        imgEl.src = '';
     }
 
-    // Navigation buttons state
+    // --- Mode Separation: Essay / Curtain vs MCQ ---
+    const optBox = document.getElementById('opt-box');
+    const curtainBox = document.getElementById('essay-curtain');
+    const hintBox = document.getElementById('hint-box');
+
+    if (isEssayMode) {
+        optBox.style.display = 'none';
+        hintBox.style.display = 'none';
+        curtainBox.style.display = 'block';
+
+        // Reset curtain
+        isCurtainRevealed = false;
+        document.getElementById('curtain-sheet').style.display = 'flex';
+        document.getElementById('curtain-content').style.display = 'none';
+
+        document.getElementById('essay-ans-text').innerText = qData.opts[qData.correct];
+        document.getElementById('essay-expl-text').innerText = qData.hint || '';
+    } else {
+        curtainBox.style.display = 'none';
+        optBox.style.display = 'grid';
+        optBox.innerHTML = '';
+
+        qData.shuffledIndices.forEach(originalIdx => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'option-btn';
+            btn.innerHTML = qData.opts[originalIdx];
+
+            if (qData.userAnswerIndex === null) {
+                btn.onclick = () => selectOption(btn, originalIdx, qData);
+            } else {
+                btn.disabled = true;
+                if (originalIdx === qData.correct) {
+                    btn.classList.add('correct');
+                } else if (originalIdx === qData.userAnswerIndex) {
+                    btn.classList.add('wrong');
+                }
+            }
+            optBox.appendChild(btn);
+        });
+
+        if (qData.userAnswerIndex !== null && qData.hint) {
+            document.getElementById('hint-content').innerHTML = qData.hint;
+            hintBox.style.display = 'block';
+        } else {
+            hintBox.style.display = 'none';
+        }
+    }
+
+    // Footer Navigation Controls
     document.getElementById('prev-btn').disabled = (currentIndex === 0);
     const nextBtn = document.getElementById('next-btn');
-    nextBtn.disabled = (qData.userAnswerIndex === null);
 
-    nextBtn.innerText = (currentIndex === total - 1 && qData.userAnswerIndex !== null)
-        ? "Finish Round"
-        : "Next";
+    if (isEssayMode) {
+        nextBtn.disabled = false; // Free navigation allowed in Essay mode
+        document.getElementById('next-label').innerText = (currentIndex === total - 1) ? "Finish" : "Next";
+    } else {
+        nextBtn.disabled = (qData.userAnswerIndex === null);
+        document.getElementById('next-label').innerText = (currentIndex === total - 1 && qData.userAnswerIndex !== null)
+            ? "Finish Round"
+            : "Next";
+    }
+}
+
+function revealCurtain() {
+    isCurtainRevealed = true;
+    document.getElementById('curtain-sheet').style.display = 'none';
+    document.getElementById('curtain-content').style.display = 'block';
 }
 
 function selectOption(selectedBtn, originalIdx, qData) {
@@ -172,37 +226,43 @@ function goNext() {
 }
 
 function evaluateRoundEnd() {
+    if (isEssayMode) {
+        document.getElementById('win-msg').innerText = "You've reviewed all flashcards in this section!";
+        document.getElementById('win-overlay').style.display = 'flex';
+        confettiEffect();
+        return;
+    }
+
     let failedQuestions = currentRoundQuestions.filter(q => q.userAnswerIndex !== q.correct);
 
     if (failedQuestions.length > 0) {
         currentRound++;
         prepareRound(JSON.parse(JSON.stringify(failedQuestions)));
-        document.getElementById('round-info').innerText = `Round (${currentRound}) - Reviewing Mistakes`;
+        document.getElementById('round-info').innerText = `Round ${currentRound} (Retesting ${failedQuestions.length} Mistake${failedQuestions.length > 1 ? 's' : ''})`;
         loadQuestion();
     } else {
+        document.getElementById('win-msg').innerText = "All questions completed with 100% accuracy!";
         document.getElementById('win-overlay').style.display = 'flex';
-        if (typeof confetti === 'function') {
-            confetti({
-                particleCount: 200,
-                spread: 100,
-                origin: { y: 0.6 }
-            });
-        }
+        confettiEffect();
     }
 }
 
-// --------------------------------------------------------------------------
-// Trigger Camouflage Click Effect
-// --------------------------------------------------------------------------
+function confettiEffect() {
+    if (typeof confetti === 'function') {
+        confetti({
+            particleCount: 180,
+            spread: 90,
+            origin: { y: 0.6 }
+        });
+    }
+}
+
 function triggerCamouflageFlash() {
-    const authorEl = document.querySelector('.author-name');
-    if (!authorEl) return;
-    authorEl.classList.remove('stealth-clicked');
-    void authorEl.offsetWidth; // Reflow
-    authorEl.classList.add('stealth-clicked');
-    setTimeout(() => {
-        authorEl.classList.remove('stealth-clicked');
-    }, 1200);
+    const el = document.querySelector('.author-name');
+    if (!el) return;
+    el.classList.remove('flash-triggered');
+    void el.offsetWidth;
+    el.classList.add('flash-triggered');
 }
 
 window.addEventListener('DOMContentLoaded', () => {

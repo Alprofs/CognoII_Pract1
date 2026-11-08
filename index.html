@@ -5,94 +5,149 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pharmacognosy II - Sheet 1 Practical</title>
-    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800;900&family=Poppins:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Poppins:wght@500;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div id="app-container">
+        
         <!-- Home Screen -->
         <div id="home-screen" class="screen active">
-            <div class="hero-section">
-                <span class="badge">Sheet 1 Practice</span>
-                <h1 class="main-title">Pharmacognosy II</h1>
-                <p class="subtitle">Practical Revision & Powder Identification</p>
-            </div>
+            <header class="top-nav-bar">
+                <span class="sheet-pill">Sheet 1 Practice</span>
+                <h1 class="brand-title">Pharmacognosy II</h1>
+                <p class="brand-subtitle">BUA Practical Revision Platform</p>
+            </header>
 
-            <!-- Two Main Navigation Buttons -->
-            <div class="modes-container">
-                <button type="button" class="mode-card mode-elements" onclick="startQuizMode('elements')">
-                    <div class="mode-icon">🔬</div>
-                    <div class="mode-info">
-                        <h2>Key Elements & Powder</h2>
-                        <p>Identification, Crystals, Fibers, Negatives, Chemical Tests & Physicals</p>
+            <main class="modes-grid">
+                <button type="button" class="duo-card duo-card-green" onclick="startQuizMode('elements')">
+                    <div class="card-icon-bubble">
+                        <svg viewBox="0 0 24 24" class="svg-icon"><path fill="currentColor" d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5v-5Z"/></svg>
                     </div>
-                    <span class="mode-arrow">➜</span>
+                    <div class="card-content">
+                        <h2>Elements</h2>
+                        <p>Microscopic identification, powder elements, tests & physical properties</p>
+                    </div>
+                    <span class="card-arrow">
+                        <svg viewBox="0 0 24 24" class="svg-arrow"><path fill="currentColor" d="M8.59 16.59L13.17 12L8.59 7.41L10 6l6 6l-6 6l-1.41-1.41z"/></svg>
+                    </span>
                 </button>
 
-                <button type="button" class="mode-card mode-ts" onclick="startQuizMode('ts')">
-                    <div class="mode-icon">📐</div>
-                    <div class="mode-info">
-                        <h2>Transverse Sections (T.S.)</h2>
-                        <p>Diagrams, Numerical Labeling (1, 2, 3...) & Stem/Bark Anatomy</p>
+                <button type="button" class="duo-card duo-card-blue" onclick="startQuizMode('ts')">
+                    <div class="card-icon-bubble">
+                        <svg viewBox="0 0 24 24" class="svg-icon"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93c0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41c0 2.08-.8 3.97-2.1 5.39z"/></svg>
                     </div>
-                    <span class="mode-arrow">➜</span>
+                    <div class="card-content">
+                        <h2>T.S</h2>
+                        <p>Transverse Sections, numerical labels (1, 2, 3...) & organ anatomy</p>
+                    </div>
+                    <span class="card-arrow">
+                        <svg viewBox="0 0 24 24" class="svg-arrow"><path fill="currentColor" d="M8.59 16.59L13.17 12L8.59 7.41L10 6l6 6l-6 6l-1.41-1.41z"/></svg>
+                    </span>
                 </button>
-            </div>
+            </main>
 
-            <div id="home-footer">
-                <p class="created-by">Designed & Developed by</p>
-                <!-- اسمك بتأثير التمويه الذي لا يلاحظه إلا صاحب نظرة ثاقبة -->
-                <p class="author-name" onclick="triggerCamouflageFlash()" title="Sharp Eyes Only">𝓐𝓱𝓶𝓮𝓭 𝓜𝓸𝓼𝓽𝓪𝓯𝓪</p>
-            </div>
+            <footer id="home-footer">
+                <p class="created-by">DEVELOPED BY</p>
+                <div class="author-wrapper">
+                    <span class="author-name" onclick="triggerCamouflageFlash()">𝓐𝓱𝓶𝓮𝓭 𝓜𝓸𝓼𝓽𝓪𝓯𝓪</span>
+                </div>
+            </footer>
         </div>
 
         <!-- Quiz Screen -->
         <div id="quiz-screen" class="screen">
-            <div class="quiz-header">
-                <div class="progress-bar-bg">
-                    <div id="bar" class="progress-bar-fill"></div>
+            <header class="quiz-topbar">
+                <button type="button" class="icon-round-btn exit-btn" onclick="goHome()" title="Exit">
+                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"/></svg>
+                </button>
+                <div class="progress-outer">
+                    <div id="bar" class="progress-inner">
+                        <span class="progress-shine"></span>
+                    </div>
                 </div>
-                <div id="counter" class="quiz-counter">0 / 0</div>
-                <button type="button" class="close-btn" onclick="goHome()" aria-label="Exit Quiz">✕</button>
-            </div>
+                <button type="button" id="study-mode-toggle" class="icon-round-btn mode-btn" onclick="toggleStudyMode()" title="Toggle Flashcard/Essay Mode">
+                    <svg viewBox="0 0 24 24" id="mode-icon"><path fill="currentColor" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5s5 2.24 5 5s-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3s3-1.34 3-3s-1.34-3-3-3z"/></svg>
+                </button>
+            </header>
 
-            <!-- Dedicated internal scroll body (Never freezes or hides bottom options) -->
-            <div class="quiz-scroll-container">
-                <div id="round-info">Round (1)</div>
-                
-                <div class="question-box">
-                    <img id="q-img" class="quiz-question-img" src="" alt="Question Image" style="display: none;">
-                    <div id="q-txt">...</div>
+            <div class="quiz-scroll-body">
+                <div class="meta-strip">
+                    <span id="round-info" class="round-badge">Round 1</span>
+                    <span id="counter" class="counter-badge">0 / 0</span>
+                    <span id="mode-badge" class="mode-state-badge">MCQ Mode</span>
                 </div>
 
-                <div class="options-container" id="opt-box"></div>
-                
-                <div id="hint-box" class="quiz-hint-box"></div>
+                <div class="question-container">
+                    <!-- Image Wrapper with Spinner for Slow Connections -->
+                    <div id="q-img-wrapper" class="q-img-box" style="display: none;">
+                        <div id="img-loader" class="img-skeleton">
+                            <div class="spinner"></div>
+                            <span>Loading specimen image...</span>
+                        </div>
+                        <img id="q-img" class="quiz-img" src="" alt="Microscopic Specimen" style="display: none;">
+                    </div>
+
+                    <div id="q-txt" class="question-text">...</div>
+                </div>
+
+                <!-- Multiple Choice Container -->
+                <div id="opt-box" class="options-grid"></div>
+
+                <!-- Curtain / Essay Flashcard Reveal Container -->
+                <div id="essay-curtain" class="curtain-container" style="display: none;">
+                    <div id="curtain-sheet" class="curtain-cover" onclick="revealCurtain()">
+                        <div class="curtain-handle">
+                            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 0 0-9 9c0 3.6 2.1 6.7 5.2 8.1l-.7 1.9c-4-1.7-6.5-5.5-6.5-10a11 11 0 1 1 22 0c0 4.5-2.5 8.3-6.5 10l-.7-1.9c3.1-1.4 5.2-4.5 5.2-8.1a9 9 0 0 0-9-9z"/></svg>
+                            <span>Tap to Pull Curtain & Reveal Answer</span>
+                        </div>
+                    </div>
+                    <div id="curtain-content" class="curtain-revealed-data">
+                        <div class="answer-chip">Correct Answer</div>
+                        <h3 id="essay-ans-text">...</h3>
+                        <div id="essay-expl-text" class="essay-explanation"></div>
+                    </div>
+                </div>
+
+                <!-- Explanation Box (MCQ Mode) -->
+                <div id="hint-box" class="duo-hint-card">
+                    <div class="hint-header">
+                        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74c0-3.86-3.14-7-7-7z"/></svg>
+                        <span>Key Pharmacognosy Fact</span>
+                    </div>
+                    <div id="hint-content" class="hint-body"></div>
+                </div>
             </div>
 
-            <div class="footer">
-                <button type="button" id="prev-btn" class="nav-btn prev" onclick="goPrev()">Prev</button>
-                <button type="button" id="next-btn" class="nav-btn next" onclick="goNext()">Next</button>
-            </div>
+            <!-- Bottom Navigation Bar: Prev on LEFT, Next on RIGHT -->
+            <footer class="quiz-footer">
+                <button type="button" id="prev-btn" class="duo-btn duo-btn-secondary" onclick="goPrev()">
+                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M15.41 7.41L14 6l-6 6l6 6l1.41-1.41L10.83 12z"/></svg>
+                    <span>Prev</span>
+                </button>
+                <button type="button" id="next-btn" class="duo-btn duo-btn-primary" onclick="goNext()">
+                    <span id="next-label">Next</span>
+                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M10 6L8.59 7.41L13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                </button>
+            </footer>
         </div>
 
-        <!-- Win Dialog Overlay -->
+        <!-- Success Modal Dialog -->
         <div id="win-overlay" class="overlay">
-            <div class="dialog">
-                <h1 class="win-title">🎉</h1>
-                <h2 id="win-status">Outstanding!</h2>
-                <p id="win-msg" class="win-text">All questions completed successfully!</p>
-                <button type="button" id="home-btn" class="btn-main" onclick="closeWinOverlay()">Back to Menu</button>
+            <div class="duo-dialog">
+                <div class="confetti-cannon-icon">
+                    <svg viewBox="0 0 24 24"><path fill="#58CC02" d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg>
+                </div>
+                <h2>Practice Mastered!</h2>
+                <p id="win-msg">You've successfully covered all questions for this module without errors.</p>
+                <button type="button" class="duo-btn duo-btn-primary" style="width: 100%;" onclick="closeWinOverlay()">Back to Menu</button>
             </div>
         </div>
     </div>
 
-    <!-- 1. تحميل ملف الأسئلة المستقل -->
     <script src="questions.js"></script>
-
-    <!-- 2. تحميل كود المنطق البرمجي -->
     <script src="main.js"></script>
 </body>
 
