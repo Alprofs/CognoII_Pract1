@@ -379,6 +379,7 @@ body {
     border: 3px solid var(--border-color);
     border-bottom: 6px solid var(--border-depth);
     border-radius: 24px;
+    flex-shrink: 0 !important;
     padding: 18px 20px;
     margin-bottom: 18px;
     animation: popCard 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -387,8 +388,9 @@ body {
 .q-img-box {
     position: relative;
     width: 100%;
-    min-height: 180px;
-    max-height: 280px;
+    max-height: 210px !important; /* ارتفاع مثالي يترك مساحة كافية للزر أسفله */
+    min-height: 160px;
+    flex-shrink: 0 !important;
     margin-bottom: 14px;
     border-radius: 16px;
     overflow: hidden;
@@ -424,7 +426,8 @@ body {
 
 .quiz-img {
     max-width: 100%;
-    max-height: 280px;
+    max-height: 210px !important;
+    width: auto;
     object-fit: contain;
     border-radius: 14px;
     display: block;
@@ -506,7 +509,9 @@ body {
    ========================================================================== */
 .curtain-container {
     width: 100%;
-    margin-top: 8px;
+    margin-top: 14px;
+    margin-bottom: 20px;
+    flex-shrink: 0 !important; /* يمنع الفليكس من تقليص حجم الزر إطلاقاً */
     background: var(--card-surface);
     border: 3px solid var(--border-color);
     border-bottom: 6px solid var(--border-depth);
@@ -516,12 +521,14 @@ body {
 }
 
 .curtain-cover {
-    padding: 30px 20px;
     background: linear-gradient(135deg, #1CB0F6, #1592CE);
     color: #FFFFFF;
     text-align: center;
     cursor: pointer;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    min-height: 75px !important; /* يحافظ على حجم الزر كبيراً وواضحاً */
+    padding: 20px !important;
+    flex-shrink: 0 !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -541,7 +548,8 @@ body {
 }
 
 .curtain-revealed-data {
-    padding: 22px;
+    padding: 22px !important;
+    flex-shrink: 0 !important;
     display: none;
     animation: fadeInDown 0.35s ease;
 }
